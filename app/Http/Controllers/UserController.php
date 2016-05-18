@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
 use Response;
+use DB;
 
 class UserController extends Controller
 {
@@ -44,14 +45,19 @@ class UserController extends Controller
             // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
             return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan datos necesarios para el registro.'])],422);
         }
- 
+        
+        //ahora comprobamos si ya existe ese usuario en la BD
+        $user = DB::table('users')->select('*')->where('email', '=', $request->input('email'))->get();
+        if($user)
+            return response()->json(['errors'=>array(['code'=>423,'message'=>'El usuario ya existe.'])],423);
+
         // Insertamos una fila en User con create pasándole todos los datos recibidos.
         // En $request->all() tendremos todos los campos del formulario recibidos.
-        $newUser=User::create($request->all());
+        $user=User::create($request->all());
  
         // Más información sobre respuestas en http://jsonapi.org/format/
         // Devolvemos el código HTTP 201 Created – [Creada] Respuesta a un POST que resulta en una creación. Debería ser combinado con un encabezado Location, apuntando a la ubicación del nuevo recurso.
-        $response = Response::make(json_encode(['data'=>$newUser]), 201)->header('Location', $BASE_URL.$newUser->id)->header('Content-Type', 'application/json');
+        $response = Response::make(json_encode(['data'=>$user]), 200)->header('Location', $BASE_URL.$user->id)->header('Content-Type', 'application/json');
         return $response;
     }
  
@@ -75,7 +81,23 @@ class UserController extends Controller
  
         return response()->json(['status'=>'ok','data'=>$user],200);
     }
- 
+    
+    public function login($email, $password)
+    {
+        $user = DB::table('users')->select('*')->whereEmailAndPassword($email, $password)->get();
+
+        if($user){
+            //$this->error('El usuario existe!');
+            $response = Response::make(json_encode(['data'=>$user]), 200)->header('Location', 'http://192.168.2.102:8000/users/1')->header('Content-Type', 'application/json');
+            return $response;
+        }else{
+            //$this->error('El usuario NO existe');
+            return response()->json(['errors'=>array(['code'=>401,'message'=>'Usuario o contraseña incorrectos.'])],401);
+        }
+
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -115,25 +137,4 @@ class UserController extends Controller
         return response()->json(['code'=>204,'message'=>'Se ha eliminado el usuario correctamente.'],204);
     }
 
-    public function isRegistered($name, $password)
-    {
-        //$user=User::find($name);
-        $user = DB::table('users')->select('*')->where('password', '=', $password)->get();
-
-
-        if($user)
-            return response()->json(['status'=>'ok','data'=>$user],200);
-
-    }
-
-    public function emailUsed($email)
-    {
-        $user = DB::table('users')->where('email', '=', $email)->get();
-
-        if(!$user)
-            return response()->json(['code'=>204,'message'=>'Email libre.'],204);
-
-        return response()->json(['errors'=>array(['code'=>200,'message'=>'El email está siendo usado.'])],200);
-        
-    }
 }
