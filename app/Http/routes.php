@@ -17,4 +17,4 @@ Route::get('/', function () {
 
 Route::resource('users','UserController');
 
-Route::get('users/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
+Route::post('users/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
