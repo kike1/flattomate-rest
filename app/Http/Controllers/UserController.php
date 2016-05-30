@@ -84,11 +84,11 @@ class UserController extends Controller
     
     public function login($email, $password)
     {
-        $user = DB::table('users')->select('*')->whereEmailAndPassword($email, $password)->get();
+        $user = DB::table('users')->select('*')->whereEmailAndPassword($email, $password)->first();
 
         if($user){
             //$this->error('El usuario existe!');
-            $response = Response::make(json_encode(['data'=>$user]), 200)->header('Location', 'http://192.168.2.102:8000/users/8')->header('Content-Type', 'application/json');
+            $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
             return $response;
         }else{
             //$this->error('El usuario NO existe');
