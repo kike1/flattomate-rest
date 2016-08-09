@@ -14,14 +14,14 @@ class UsersAccommodationsMigration extends Migration
     {
         Schema::create('users_accommodations', function (Blueprint $table) {
             $table->increments('id');
-
             $table->integer('id_user')->unsigned()->index();
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->integer('id_accommodation')->unsigned()->index();
-            $table->foreign('id_accommodation')->references('id')->on('accommodations')->onDelete('cascade');
-
             $table->timestamps();
+
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_accommodation')->references('id')->on('accommodations')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -31,6 +31,11 @@ class UsersAccommodationsMigration extends Migration
      */
     public function down()
     {
+        Schema::table('users_accommodations', function ($table) {
+            $table->dropForeign('users_accommodations_id_user_foreign');
+            $table->dropForeign('users_accommodations_id_accommodation_foreign');
+        });
+
         Schema::drop('users_accommodations');
     }
 }

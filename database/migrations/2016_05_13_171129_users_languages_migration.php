@@ -14,13 +14,13 @@ class UsersLanguagesMigration extends Migration
     {
         Schema::create('users_languages', function (Blueprint $table) {
             $table->increments('id');
-
             $table->integer('id_user')->unsigned()->index();
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->integer('id_language')->unsigned()->index();
-            $table->foreign('id_language')->references('id')->on('languages')->onDelete('cascade');
-
+            
             $table->timestamps();
+
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_language')->references('id')->on('languages')->onDelete('cascade');            
         });
     }
 
@@ -31,6 +31,10 @@ class UsersLanguagesMigration extends Migration
      */
     public function down()
     {
-        Schema::drop('userslanguages');
+        Schema::table('users_languages', function ($table) {
+            $table->dropForeign('users_languages_id_user_foreign');
+            $table->dropForeign('users_languages_id_language_foreign');
+        });
+        Schema::drop('users_languages');
     }
 }

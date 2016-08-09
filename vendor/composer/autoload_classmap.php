@@ -6,9 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'AccommodationMigration' => $baseDir . '/database/migrations/2016_05_10_184839_accommodation_migration.php',
+    'AccommodationMigration' => $baseDir . '/database/migrations/2016_05_04_184839_accommodation_migration.php',
     'AccommodationsServicesMigration' => $baseDir . '/database/migrations/2016_05_13_172601_accommodations_services_migration.php',
-    'AnnouncementMigration' => $baseDir . '/database/migrations/2016_05_10_190053_announcement_migration.php',
+    'AddAgeToUsersTable' => $baseDir . '/database/migrations/2016_08_05_171645_add_age_to_users_table.php',
+    'AnnouncementMigration' => $baseDir . '/database/migrations/2016_05_03_190053_announcement_migration.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
@@ -83,7 +84,7 @@ return array(
     'Hamcrest\\Xml\\HasXPath' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
     'IlluminateQueueClosure' => $vendorDir . '/laravel/framework/src/Illuminate/Queue/IlluminateQueueClosure.php',
     'ImageMigration' => $baseDir . '/database/migrations/2016_05_10_184918_image_migration.php',
-    'LanguageMigration' => $baseDir . '/database/migrations/2016_05_10_184933_language_migration.php',
+    'LanguageMigration' => $baseDir . '/database/migrations/2016_05_02_184933_language_migration.php',
     'PHPUnit_Exception' => $vendorDir . '/phpunit/phpunit/src/Exception.php',
     'PHPUnit_Extensions_GroupTestSuite' => $vendorDir . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
     'PHPUnit_Extensions_PhptTestCase' => $vendorDir . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -519,7 +520,7 @@ return array(
     'ServiceMigration' => $baseDir . '/database/migrations/2016_05_10_184955_service_migration.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
-    'UserMigration' => $baseDir . '/database/migrations/2016_05_10_185015_user_migration.php',
+    'UserMigration' => $baseDir . '/database/migrations/2016_05_01_185015_user_migration.php',
     'UserSeeder' => $baseDir . '/database/seeds/UserSeeder.php',
     'UsersAccommodationsMigration' => $baseDir . '/database/migrations/2016_05_13_174522_users_accommodations_migration.php',
     'UsersAnswerUsersMigration' => $baseDir . '/database/migrations/2016_05_13_172108_users_answer_users_migration.php',

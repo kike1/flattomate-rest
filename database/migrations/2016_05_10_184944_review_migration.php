@@ -15,14 +15,15 @@ class ReviewMigration extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
-
             $table->integer('id_user_wrote')->unsigned()->index();
-            $table->foreign('id_user_wrote')->references('id')->on('users')->onDelete('cascade');
             $table->integer('id_user_received')->unsigned()->index();
-            $table->foreign('id_user_received')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->foreign('id_user_wrote')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_user_received')->references('id')->on('users')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -32,6 +33,10 @@ class ReviewMigration extends Migration
      */
     public function down()
     {
+        Schema::table('reviews', function ($table) {
+            $table->dropForeign('reviews_id_user_wrote_foreign');
+            $table->dropForeign('reviews_id_user_received_foreign');
+        });
         Schema::drop('reviews');
     }
 }

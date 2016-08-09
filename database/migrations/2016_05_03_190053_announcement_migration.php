@@ -22,14 +22,15 @@ class AnnouncementMigration extends Migration
             $table->boolean('is_visible');
             $table->boolean('is_shared_room');
             $table->boolean('is_private_room');
-
             $table->integer('id_accommodation')->unsigned()->onDelete('cascade');
-            $table->foreign('id_accommodation')->references('id')->on('accommodations');
             $table->integer('id_user')->unsigned()->onDelete('cascade');
-            $table->foreign('id_user')->references('id')->on('users');
 
             $table->timestamps();
+
+            //$table->foreign('id_accommodation')->references('id')->on('accommodations');
+            $table->foreign('id_user')->references('id')->on('users');
         });
+
     }
 
     /**
@@ -39,6 +40,10 @@ class AnnouncementMigration extends Migration
      */
     public function down()
     {
+        Schema::table('announcements', function ($table) {
+            $table->dropForeign('announcements_id_accommodation_foreign');
+            $table->dropForeign('announcements_id_user_foreign');
+        });
         Schema::drop('announcements');
     }
 }

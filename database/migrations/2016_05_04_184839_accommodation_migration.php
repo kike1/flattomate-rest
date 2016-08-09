@@ -19,12 +19,15 @@ class AccommodationMigration extends Migration
             $table->integer('n_bathrooms');
             $table->integer('n_rooms');
             $table->string('location');
-
             $table->integer('id_announcement')->unsigned();
             $table->foreign('id_announcement')->references('id')->on('announcements');
 
             $table->timestamps();
 
+        });
+
+        Schema::table('announcements', function (Blueprint $table) {
+            $table->foreign('id_accommodation')->references('id')->on('accommodations');
         });
     }
 
@@ -35,6 +38,9 @@ class AccommodationMigration extends Migration
      */
     public function down()
     {
+        Schema::table('accommodations', function ($table) {
+            $table->dropForeign('accommodations_id_announcement_foreign');
+        });
         Schema::drop('accommodations');
     }
 }

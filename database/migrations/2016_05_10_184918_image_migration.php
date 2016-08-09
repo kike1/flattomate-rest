@@ -16,12 +16,13 @@ class ImageMigration extends Migration
             $table->increments('id');
             $table->string('name');
             $table->boolean('is_main');
-
             $table->integer('id_announcement')->unsigned()->index();
-            $table->foreign('id_announcement')->references('id')->on('announcements')->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->foreign('id_announcement')->references('id')->on('announcements')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -31,6 +32,9 @@ class ImageMigration extends Migration
      */
     public function down()
     {
+        Schema::table('images', function ($table) {
+            $table->dropForeign('images_id_announcement_foreign');
+        });
         Schema::drop('images');
     }
 }

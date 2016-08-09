@@ -13,13 +13,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     use Authenticatable, CanResetPassword;
 
     protected $table='users';
- 
-    // Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
-    
-    protected $fillable = [
-        'name', 'email', 'password', 'avatar', 'activity', 'bio', 'member_since'
-    ];
 
+    protected $fillable = [
+        'name', 'email', 'password', 'birthday', 'languages', 'avatar', 'activity', 'sex', 'smoke', 'sociable', 'tidy', 'bio'
+    ];
 
     protected $hidden = [
         'password', 'remember_token'

@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(['status'=>'ok','data'=>User::all()], 200);
+        return response()->json(['status'=>'ok',User::all()], 200);
 
     }
  
@@ -57,7 +57,7 @@ class UserController extends Controller
  
         // Más información sobre respuestas en http://jsonapi.org/format/
         // Devolvemos el código HTTP 201 Created – [Creada] Respuesta a un POST que resulta en una creación. Debería ser combinado con un encabezado Location, apuntando a la ubicación del nuevo recurso.
-        $response = Response::make(json_encode(['data'=>$user]), 200)->header('Location', $BASE_URL.$user->id)->header('Content-Type', 'application/json');
+        $response = Response::make(json_encode(/*['data'=>$user]*/$user), 200)->header('Location', $BASE_URL.$user->id)->header('Content-Type', 'application/json');
         return $response;
     }
  
@@ -71,7 +71,7 @@ class UserController extends Controller
     {
         $user=User::find($id);
  
-        // Si no existe ese fabricante devolvemos un error.
+        // Si no existe ese usuario devolvemos un error.
         if (!$user)
         {
             // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
@@ -79,7 +79,8 @@ class UserController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un user con ese código.'])],404);
         }
  
-        return response()->json(['status'=>'ok','data'=>$user],200);
+        return $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
+
     }
     
     public function login($email, $password)

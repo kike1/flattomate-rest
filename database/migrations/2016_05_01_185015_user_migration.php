@@ -19,6 +19,10 @@ class UserMigration extends Migration
             $table->string('password');
             $table->string('avatar');
             $table->string('activity');
+            $table->string('sex');
+            $table->tinyInteger('smoke');
+            $table->integer('sociable');
+            $table->integer('tidy');
             $table->longText('bio');
             $table->date('member_since');
             $table->rememberToken();
