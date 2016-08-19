@@ -19,3 +19,18 @@ Route::resource('users','UserController');
 
 Route::post('users/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
 Route::get('users/{id}', ['uses' => 'UserController@show', 'as' => 'users.show']);
+
+Route::get('imgs/{filename}', function ($filename)
+{
+    $path = storage_path() . '/' . $filename;
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
