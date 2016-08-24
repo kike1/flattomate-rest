@@ -20,6 +20,7 @@ Route::resource('users','UserController');
 Route::post('users/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
 Route::get('users/{id}', ['uses' => 'UserController@show', 'as' => 'users.show']);
 
+//avatar img
 Route::get('imgs/{filename}', function ($filename)
 {
     $path = storage_path() . '/' . $filename;
@@ -34,3 +35,10 @@ Route::get('imgs/{filename}', function ($filename)
 
     return $response;
 });
+
+//Languages
+//get
+Route::get('users/{iduser}/languages', ['uses' => 'UserController@getLanguages', 'as' => 'users.getLanguages']);
+//add
+Route::post('languages/add/{iduser}/{language}', ['uses' => 'UserController@setLanguage', 'as' => 'users.setLanguage']);//remove
+Route::delete('languages/remove/{iduser}/{language}', ['uses' => 'UserController@removeLanguage', 'as' => 'users.removeLanguage']);

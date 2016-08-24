@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User;
+use App\Language;
 use Response;
 use DB;
 
 class UserController extends Controller
 {
 
-    private $BASE_URL = "http://192.168.2.102:8000/users";
+    private $BASE_URL = "http://192.168.1.130:8000/users";
 
     public function __construct()
     {
@@ -130,12 +131,70 @@ class UserController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
         }       
  
-        // Procedemos por lo tanto a eliminar el fabricante.
+        // Procedemos por lo tanto a eliminar el usuario.
         $user->delete();
  
         // Se usa el código 204 No Content – [Sin Contenido] Respuesta a una petición exitosa que no devuelve un body (como una petición DELETE)
         // Este código 204 no devuelve body así que si queremos que se vea el mensaje tendríamos que usar un código de respuesta HTTP 200.
         return response()->json(['code'=>204,'message'=>'Se ha eliminado el usuario correctamente.'],204);
+    }
+
+    // function extract_name($el) {
+    //     return $el['name'];
+    // }
+    public function getLanguages($id){
+         $user = User::find($id);
+        
+        if (!$user)
+        {
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
+        }
+
+        //$languages = array_column($user->languages->toArray(), 'name');  
+
+        return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
+
+        // $languages = array_map(array($this, "extract_name"), $user->languages->toArray());
+        // return Response::make(json_encode($languages), 200)->header('Content-Type', 'application/json');
+
+    }
+
+    public function setLanguage($id, $language){
+        $user = User::find($id);
+        $lang = Language::find($language);
+        
+        if (!$user)
+        {
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
+        }
+
+        if(!$user->languages->contains($lang)){
+            $user->languages()->save($lang);
+
+            return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
+
+        }else
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Ya tenías ese idioma antes!'])],404);
+    }
+
+    public function removeLanguage($id, $language){
+        $user = User::find($id);
+        $lang = Language::find($language);
+        
+        if (!$user)
+        {
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
+        }
+
+        //if user has language associated, desaciociate it
+        if($user->languages->contains($lang)){
+            
+            $user->languages()->detach($lang);
+            return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
+
+
+        }else
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No tenias ese idioma asociado!'])],404);
     }
 
 }

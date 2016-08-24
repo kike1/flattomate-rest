@@ -43,13 +43,13 @@ class UserLanguageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $idUser
      * @return Response
      */
-    public function show($idUser,$idLanguage)
+    public function show($idUser)
     {
-        //
-        return "Mostrando -> user: $idUser. language: $idLanguage";
+        $languages = User_Language::find($idUser);
+        return "Languages: $languages";
     }
  
     /**

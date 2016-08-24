@@ -15,7 +15,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $table='users';
 
     protected $fillable = [
-        'name', 'email', 'password', 'birthday', 'languages', 'avatar', 'activity', 'sex', 'smoke', 'sociable', 'tidy', 'bio'
+        'name', 'email', 'password', 'birthday', 'avatar', 'activity', 'sex', 'smoke', 'sociable', 'tidy', 'bio'
     ];
 
     protected $hidden = [
@@ -28,9 +28,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany('App\Accommodation');
     }
 
-    public function languages()
+    public function languages() //many to many
     {
-        return $this->belongsToMany('App\Language');
+        return $this->belongsToMany('App\Language', 'users_languages', 'id_user', 'id_language');
     }
 
     public function reviews()
