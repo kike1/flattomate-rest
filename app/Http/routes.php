@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('users','UserController');
+Route::resource('user','UserController');
 
-Route::post('users/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
-Route::get('users/{id}', ['uses' => 'UserController@show', 'as' => 'users.show']);
+Route::post('user/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
+//Route::get('user/{id}', ['uses' => 'UserController@show', 'as' => 'users.show']);
 
 //avatar img
 Route::get('imgs/{filename}', function ($filename)
@@ -38,7 +38,11 @@ Route::get('imgs/{filename}', function ($filename)
 
 //Languages
 //get
-Route::get('users/{iduser}/languages', ['uses' => 'UserController@getLanguages', 'as' => 'users.getLanguages']);
+Route::get('user/{iduser}/languages', ['uses' => 'UserController@getLanguages', 'as' => 'users.getLanguages']);
 //add
 Route::post('languages/add/{iduser}/{language}', ['uses' => 'UserController@setLanguage', 'as' => 'users.setLanguage']);//remove
 Route::delete('languages/remove/{iduser}/{language}', ['uses' => 'UserController@removeLanguage', 'as' => 'users.removeLanguage']);
+
+//upload
+Route::post('user/upload', ['uses' => 'UserController@uploadImageProfile', 'as' => 'users.uploadImageProfile']); //user profile
+

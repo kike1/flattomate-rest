@@ -10,6 +10,9 @@ use App\Language;
 use Response;
 use DB;
 
+//require 'vendor/autoload.php';
+use Intervention\Image\ImageManagerStatic as Image;
+
 class UserController extends Controller
 {
 
@@ -17,7 +20,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth.basic',['only'=>['update']]);
+       // $this->middleware('auth.basic',['only'=>['update']]);
     }
 
     /**
@@ -36,30 +39,61 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
 
         // Primero comprobaremos si estamos recibiendo todos los campos.
-        if (!$request->input('name') || !$request->input('email') || !$request->input('password'))
-        {
-            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
-            // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
-            return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan datos necesarios para el registro.'])],422);
-        }
+        // if (!$request->input('name') || !$request->input('email') || !$request->input('password'))
+        // {
+        //     // Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
+        //     // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
+        //     return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan datos necesarios para el registro.'])],422);
+        // }
         
-        //ahora comprobamos si ya existe ese usuario en la BD
-        $user = DB::table('users')->select('*')->where('email', '=', $request->input('email'))->get();
-        if($user)
-            return response()->json(['errors'=>array(['code'=>423,'message'=>'El usuario ya existe.'])],423);
+        // //ahora comprobamos si ya existe ese usuario en la BD
+        // $user = DB::table('users')->select('*')->where('email', '=', $request->input('email'))->get();
+        // if($user)
+        //     return response()->json(['errors'=>array(['code'=>423,'message'=>'El usuario ya existe.'])],423);
 
-        // Insertamos una fila en User con create pasándole todos los datos recibidos.
-        // En $request->all() tendremos todos los campos del formulario recibidos.
-        $user=User::create($request->all());
+        // // Insertamos una fila en User con create pasándole todos los datos recibidos.
+        // // En $request->all() tendremos todos los campos del formulario recibidos.
+        // $user=User::create($request->all());
  
-        // Más información sobre respuestas en http://jsonapi.org/format/
-        // Devolvemos el código HTTP 201 Created – [Creada] Respuesta a un POST que resulta en una creación. Debería ser combinado con un encabezado Location, apuntando a la ubicación del nuevo recurso.
-        $response = Response::make(json_encode(/*['data'=>$user]*/$user), 200)->header('Location', $BASE_URL.$user->id)->header('Content-Type', 'application/json');
-        return $response;
+        // // Más información sobre respuestas en http://jsonapi.org/format/
+        // // Devolvemos el código HTTP 201 Created – [Creada] Respuesta a un POST que resulta en una creación. Debería ser combinado con un encabezado Location, apuntando a la ubicación del nuevo recurso.
+        // $response = Response::make(json_encode(/*['data'=>$user]*/$user), 200)->header('Location', $BASE_URL.$user->id)->header('Content-Type', 'application/json');
+        // return $response;
+
+    // -------------------------------------------------------------------
+
+    public function store(Request $request)
+    {
+        if (!is_array($request->all())) {
+            return ['error' => 'request must be an array'];
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'name'      => 'required',
+            'email'     => 'required|email',
+            'password'  => 'required'
+            ];
+
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return [
+                    'created' => false,
+                    'errors'  => $validator->errors()->all()
+                ];
+            }
+
+            User::create($request->all());
+            return ['created' => true];
+        } catch (Exception $e) {
+            \Log::info('Error creating user: '.$e);
+            return \Response::json(['created' => false], 500);
+        }
     }
  
     /**
@@ -70,18 +104,22 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user=User::find($id);
+        // $user=User::find($id);
  
-        // Si no existe ese usuario devolvemos un error.
-        if (!$user)
-        {
-            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
-            // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un user con ese código.'])],404);
-        }
+        // // Si no existe ese usuario devolvemos un error.
+        // if (!$user)
+        // {
+        //     // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
+        //     // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
+        //     return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un user con ese código.'])],404);
+        // }
  
-        return $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
+        // return $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
 
+        // // -------------------------------------------------------------------
+
+
+        return User::findOrFail($id);
     }
     
     public function login($email, $password)
@@ -106,9 +144,43 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function update(Request $request, $id)
     {
-        //
+        // Primero comprobaremos si estamos recibiendo todos los campos.
+        /*if ( !$request->input('name') || !$request->input('email') || 
+            !$request->input('password') || !$request->input('birthdate') || 
+            !$request->input('avatar') || !$request->input('activity') || 
+            !$request->input('sex') || !$request->input('smoke') || 
+            !$request->input('sociable') || !$request->input('tidy') || 
+            !$request->input('bio'))
+        {
+            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
+            return response()->json(['errors'=>array(['code'=>422,'message'=>'Algunos campos no se han recibido.'])],422);
+        }
+
+        // Buscamos el usuario.
+        $user = User::find($id);
+
+        // Si no existe el user que le hemos pasado mostramos otro código de error de no encontrado.
+        if (!$user)
+        {
+            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
+            // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese id.'])],404);
+        }*/
+        // -------------------------------------------------------------------
+        
+
+        //$id = $request->input('id');
+        $user = User::findOrFail($id);
+
+        if($user->update($request->all()))
+            return \Response::json(['updated' => true], 200);
+        else
+            return \Response::json(['updated' => false], 204);
+
+
+
     }
  
     /**
@@ -119,31 +191,34 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        // Primero eliminaremos todos los aviones de un fabricante y luego el fabricante en si mismo.
-        // Comprobamos si el fabricante que nos están pasando existe o no.
-        $user=User::find($id);
+        // // Primero eliminaremos todos los aviones de un fabricante y luego el fabricante en si mismo.
+        // // Comprobamos si el fabricante que nos están pasando existe o no.
+        // $user=User::find($id);
  
-        // Si no existe ese fabricante devolvemos un error.
-        if (!$user)
-        {
-            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
-            // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
-        }       
+        // // Si no existe ese fabricante devolvemos un error.
+        // if (!$user)
+        // {
+        //     // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
+        //     // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
+        //     return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un usuario con ese código.'])],404);
+        // }       
  
-        // Procedemos por lo tanto a eliminar el usuario.
-        $user->delete();
+        // // Procedemos por lo tanto a eliminar el usuario.
+        // $user->delete();
  
-        // Se usa el código 204 No Content – [Sin Contenido] Respuesta a una petición exitosa que no devuelve un body (como una petición DELETE)
-        // Este código 204 no devuelve body así que si queremos que se vea el mensaje tendríamos que usar un código de respuesta HTTP 200.
-        return response()->json(['code'=>204,'message'=>'Se ha eliminado el usuario correctamente.'],204);
+        // // Se usa el código 204 No Content – [Sin Contenido] Respuesta a una petición exitosa que no devuelve un body (como una petición DELETE)
+        // // Este código 204 no devuelve body así que si queremos que se vea el mensaje tendríamos que usar un código de respuesta HTTP 200.
+        // return response()->json(['code'=>204,'message'=>'Se ha eliminado el usuario correctamente.'],204);
+
+        User::destroy($id);
+        return ['deleted' => true];
     }
 
     // function extract_name($el) {
     //     return $el['name'];
     // }
     public function getLanguages($id){
-         $user = User::find($id);
+        $user = User::find($id);
         
         if (!$user)
         {
@@ -195,6 +270,19 @@ class UserController extends Controller
 
         }else
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No tenias ese idioma asociado!'])],404);
+    }
+
+    public function uploadImageProfile(Request $request){
+        
+        if ($request->file)
+        {
+            $image_name = $request->file->getClientOriginalName();
+            Image::make($request->file)->fit(300)->save('imgs/'.$image_name);
+            
+            return \Response::json(['uploaded' => true], 200);    
+        }
+
+        return \Response::json(['uploaded' => false], 204);
     }
 
 }
