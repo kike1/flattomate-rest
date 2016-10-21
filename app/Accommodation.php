@@ -15,27 +15,19 @@ class Accommodation extends Model
     // Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
     protected $hidden = ['created_at','updated_at'];
 
-    // Relación de Fabricante con Aviones:
-    public function aviones()
-    {   
-        // 1 fabricante tiene muchos aviones
-        // $this hace referencia al objeto que tengamos en ese momento de Fabricante.
-        return $this->hasMany('App\Avion');
-    }
-
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function services()
     {
-        return $this->belongsToMany('App\Service');
+        return $this->belongsToMany('App\Service', 'accommodations_services', 'id_accommodation', 'id_service');
     }
 
-    public function announcements()
+    public function announcement()
     {
-        return $this->belongsTo('App\Announcement');
+        return $this->hasOne('App\Announcement');
     }
     
 }

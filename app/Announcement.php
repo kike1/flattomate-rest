@@ -9,23 +9,23 @@ class Announcement extends Model
     protected $table='announcements';
  
     // Atributos que se pueden asignar de manera masiva.
-    protected $fillable = array('title','description','availability','min_days','max_days', 'price', 'is_visible', 'is_shared_room', 'is_private_room');
+    protected $fillable = array('title','description','availability','min_stay', 'max_stay', 'price', 'is_visible', 'is_shared_room', 'id_accommodation', 'id_user');
  
     // Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
     protected $hidden = ['created_at','updated_at'];
 
-    public function accommodations()
+    public function accommodation()
     {
-        return $this->belongsTo('App\Accommodation');
+        return $this->hasOne('App\Accommodation', 'id', 'id_accommodation');
     }
 
-    public function users()
+    public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'id_user');
     }
 
     public function images()
     {
-        return $this->belongsToMany('App\Image');
+        return $this->hasMany('App\Image', 'id_announcement');
     }
 }

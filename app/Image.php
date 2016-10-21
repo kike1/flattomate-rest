@@ -15,7 +15,7 @@ class Image extends Model
     protected $hidden = ['created_at','updated_at'];
 
     /* relationships */
-    public function announcements()
+    public function announcement()
     {
         return $this->belongsTo('App\Announcement');
     }

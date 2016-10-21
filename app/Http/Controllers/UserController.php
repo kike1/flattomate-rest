@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User;
+use App\Announcement;
 use App\Language;
 use Response;
 use DB;
@@ -16,7 +17,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class UserController extends Controller
 {
 
-    private $BASE_URL = "http://192.168.1.130:8000/users";
+    //private $BASE_URL = "http://192.168.1.130:8000/users";
 
     public function __construct()
     {
@@ -104,21 +105,6 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        // $user=User::find($id);
- 
-        // // Si no existe ese usuario devolvemos un error.
-        // if (!$user)
-        // {
-        //     // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
-        //     // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
-        //     return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un user con ese código.'])],404);
-        // }
- 
-        // return $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
-
-        // // -------------------------------------------------------------------
-
-
         return User::findOrFail($id);
     }
     
@@ -128,8 +114,7 @@ class UserController extends Controller
 
         if($user){
             //$this->error('El usuario existe!');
-            $response = Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
-            return $response;
+            return Response::make(json_encode($user), 200)->header('Content-Type', 'application/json');
         }else{
             //$this->error('El usuario NO existe');
             return response()->json(['errors'=>array(['code'=>401,'message'=>'Usuario o contraseña incorrectos.'])],401);
@@ -227,8 +212,8 @@ class UserController extends Controller
 
         //$languages = array_column($user->languages->toArray(), 'name');  
 
-        return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
-
+        //return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
+        return $user->languages;
         // $languages = array_map(array($this, "extract_name"), $user->languages->toArray());
         // return Response::make(json_encode($languages), 200)->header('Content-Type', 'application/json');
 
@@ -267,7 +252,6 @@ class UserController extends Controller
             $user->languages()->detach($lang);
             return Response::make(json_encode($user->languages), 200)->header('Content-Type', 'application/json');
 
-
         }else
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No tenias ese idioma asociado!'])],404);
     }
@@ -283,6 +267,19 @@ class UserController extends Controller
         }
 
         return \Response::json(['uploaded' => false], 204);
+    }
+
+    public function requestNegotiation($id, $idUserAnnouncement, $idAnnouncement){
+        $user = User::findOrFail($id);
+        $userAnnouncement = User::findOrFail($idUserAnnouncement);
+        //$announcement = Announcement::findOrFail($idAnnouncement);
+
+        if($user->chats->contains($idUserAnnouncement))
+            return \Response::json(['request_negotiation' => false], 404); 
+        else
+            $user->chats()->save($userAnnouncement, ['id_announcement' => $idAnnouncement]);   
+        
+        return \Response::json(['request_negotiation' => true], 200); 
     }
 
 }

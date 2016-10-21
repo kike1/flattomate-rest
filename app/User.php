@@ -25,7 +25,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /* relationships */
     public function accommodations()
     {
-        return $this->belongsToMany('App\Accommodation');
+        return $this->hasMany('App\Accommodation');
     }
 
     public function languages() //many to many
@@ -40,6 +40,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function announcements()
     {
-        return $this->belongsToMany('App\Announcement');
+        return $this->hasMany('App\Announcement');
+    }
+
+    public function chats()
+    {
+        return $this->belongsToMany('App\User', 'users_answer_users', 'id_user_sender', 'id_user_receiver')->withPivot('id_announcement');
     }
 }

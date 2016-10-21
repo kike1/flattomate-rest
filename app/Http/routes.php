@@ -15,25 +15,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/* 
+*
+* USER
+*/
 Route::resource('user','UserController');
 
 Route::post('user/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
-//Route::get('user/{id}', ['uses' => 'UserController@show', 'as' => 'users.show']);
 
 //avatar img
 Route::get('imgs/{filename}', function ($filename)
 {
-    $path = storage_path() . '/' . $filename;
+    return Image::make(storage_path() . '/' . $filename)->response();
+});
 
-    if(!File::exists($path)) abort(404);
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    $response = Response::make($file, 200);
-    $response->header("Content-Type", $type);
-
-    return $response;
+Route::get('announcements/{filename}', function ($filename)
+{
+    return Image::make(storage_path() . '/' . $filename)->response();
 });
 
 //Languages
@@ -46,3 +44,34 @@ Route::delete('languages/remove/{iduser}/{language}', ['uses' => 'UserController
 //upload
 Route::post('user/upload', ['uses' => 'UserController@uploadImageProfile', 'as' => 'users.uploadImageProfile']); //user profile
 
+//request negotiation
+Route::post('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => 'UserController@requestNegotiation', 
+																	'as' => 'users.removrequestNegotiationeLanguage']);
+
+/*
+*
+* ANNOUNCEMENT
+*/
+Route::resource('announcement','AnnouncementController');
+
+Route::get('announcement/{id}/user', ['uses' => 'AnnouncementController@getUser', 'as' => 'announcements.getUser']);
+Route::get('announcement/{id}/services', ['uses' => 'AnnouncementController@getServices', 'as' => 'announcements.getServices']);
+Route::get('announcement/{id}/images', ['uses' => 'AnnouncementController@getImages', 'as' => 'announcements.getImages']);
+Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController@getAccommodation', 'as' => 'announcements.getAccommodation']);
+
+/*
+* SERVICE
+*/
+Route::resource('service','ServiceController');
+
+/*
+*
+* ACCOMMODATION
+*/
+Route::resource('accommodation','AccommodationController');
+
+/*
+*
+* REVIEWS
+*/
+Route::resource('review','ReviewController');

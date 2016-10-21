@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Service;
+
 class ServiceController extends Controller
 {
     /**
@@ -15,7 +17,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        return Service::all();
     }
  
     /**

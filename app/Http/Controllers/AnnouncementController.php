@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Response;
+use App\Announcement;
 
 class AnnouncementController extends Controller
 {
@@ -46,9 +48,39 @@ class AnnouncementController extends Controller
      */
     public function show($id)
     {
-        //
+        return Announcement::findOrFail($id);
     }
- 
+    
+    public function getUser($id)
+    {
+        $ad = Announcement::find($id);
+        
+        if (!$ad)
+        {
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un anuncio con ese código.'])],404);
+        }
+
+        //$languages = array_column($user->languages->toArray(), 'name');  
+
+        return Response::make(json_encode($ad->user), 200)->header('Content-Type', 'application/json');
+
+        //return Announcement::findOrFail($id)->user();
+    }
+
+    public function getServices($id)
+    {
+        return Announcement::findOrFail($id)->accommodation->services;
+    }
+
+    public function getImages($id)
+    {
+        return Announcement::findOrFail($id)->images;
+    }
+
+    public function getAccommodation($id)
+    {
+        return Announcement::findOrFail($id)->accommodation;
+    }
     /**
      * Show the form for editing the specified resource.
      *

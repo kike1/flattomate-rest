@@ -16,6 +16,6 @@ class Service extends Model
 
     public function accommodations()
     {
-        return $this->belongsToMany('App\Accommodation');
+        return $this->belongsToMany('App\Accommodation', 'accommodations_services', 'id_accommodation', 'id_service');
     }
 }

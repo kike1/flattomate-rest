@@ -9,7 +9,7 @@ class Review extends Model
     protected $table='reviews';
  
     // Atributos que se pueden asignar de manera masiva.
-    protected $fillable = array('description','id_user_wrote','id_user_received');
+    protected $fillable = array('description','id_user_wrote','id_announcement');
  
     // Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
     protected $hidden = ['created_at','updated_at'];
@@ -17,6 +17,6 @@ class Review extends Model
     /* relationships */
     public function users()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'id_user_wrote');
     }
 }
