@@ -21,23 +21,45 @@ class AnnouncementController extends Controller
     }
  
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
- 
-    /**
      * Store a newly created resource in storage.
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        if (!is_array($request->all())) {
+            return ['error' => 'request must be an array'];
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'title'      => 'required',
+            'description'     => 'required',
+            'availability'  => 'required',
+            'min_stay'  => 'required',
+            'max_stay'  => 'required',
+            'price'  => 'required',
+            'is_shared_room'  => 'required',
+            'id_user'  => 'required'
+            ];
+
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return [
+                    'created' => false,
+                    'errors'  => $validator->errors()->all()
+                ];
+            }
+
+            $ad = Announcement::create($request->all());
+            return Response::make(json_encode($ad), 200)->header('Content-Type', 'application/json');
+
+            //return ['created' => true];
+        } catch (Exception $e) {
+            \Log::info('Error creating announcement: '.$e);
+            return \Response::json(['created' => false], 500);
+        }
     }
  
     /**
@@ -81,6 +103,24 @@ class AnnouncementController extends Controller
     {
         return Announcement::findOrFail($id)->accommodation;
     }
+
+    public function uploadAnnouncementImage(Request $request){
+        
+        if ($request->file)
+        {
+            $image_name = $request->file->getClientOriginalName();
+            Image::make($request->file)->fit(300)->save('announcements/'.$image_name);
+            
+            return \Response::json(['uploaded' => true], 200);    
+        }
+
+        return \Response::json(['uploaded' => false], 204);
+    }
+
+    public function last(){
+        return $this->announcements()->orderBy('created_at', 'desc')->first();
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

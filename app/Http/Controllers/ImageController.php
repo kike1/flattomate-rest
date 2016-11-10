@@ -35,7 +35,31 @@ class ImageController extends Controller
      */
     public function store()
     {
-        //
+        if (!is_array($request->all())) {
+            return ['error' => 'request must be an array'];
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'name'              => 'required',
+            'id_announcement'   => 'required'
+            ];
+
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return [
+                    'created' => false,
+                    'errors'  => $validator->errors()->all()
+                ];
+            }
+
+            Image::create($request->all());
+            return ['created' => true];
+        } catch (Exception $e) {
+            \Log::info('Error creating image: '.$e);
+            return \Response::json(['created' => false], 500);
+        }
     }
  
     /**

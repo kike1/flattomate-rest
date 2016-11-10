@@ -6,9 +6,22 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Accommodation;
+use Response;
 
 class AccommodationController extends Controller
 {
+
+    public function setServices($idaccommodation, $services){
+        $accommodation = Accommodation::findOrFail($idaccommodation);
+
+        foreach ($services as $service) {
+            $accommodation->services()->save($service);
+        }
+
+        return \Response::json(['services_added' => true], 200);
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +47,36 @@ class AccommodationController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        if (!is_array($request->all())) {
+            return ['error' => 'request must be an array'];
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'n_beds'      => 'required',
+            'location'     => 'required',
+            'id_user'  => 'required'
+            ];
+
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return [
+                    'created' => false,
+                    'errors'  => $validator->errors()->all()
+                ];
+            }
+
+            $accommodation = Accommodation::create($request->all());
+            return Response::make(json_encode($accommodation), 200)->header('Content-Type', 'application/json');
+
+            //return ['created' => true];
+        } catch (Exception $e) {
+            \Log::info('Error creating announcement: '.$e);
+            return \Response::json(['created' => false], 500);
+        }
     }
  
     /**

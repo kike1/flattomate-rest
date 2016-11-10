@@ -38,7 +38,8 @@ Route::get('announcements/{filename}', function ($filename)
 //get
 Route::get('user/{iduser}/languages', ['uses' => 'UserController@getLanguages', 'as' => 'users.getLanguages']);
 //add
-Route::post('languages/add/{iduser}/{language}', ['uses' => 'UserController@setLanguage', 'as' => 'users.setLanguage']);//remove
+Route::post('languages/add/{iduser}/{language}', ['uses' => 'UserController@setLanguage', 'as' => 'users.setLanguage']);
+//remove
 Route::delete('languages/remove/{iduser}/{language}', ['uses' => 'UserController@removeLanguage', 'as' => 'users.removeLanguage']);
 
 //upload
@@ -59,16 +60,22 @@ Route::get('announcement/{id}/services', ['uses' => 'AnnouncementController@getS
 Route::get('announcement/{id}/images', ['uses' => 'AnnouncementController@getImages', 'as' => 'announcements.getImages']);
 Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController@getAccommodation', 'as' => 'announcements.getAccommodation']);
 
+Route::post('announcement/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
+Route::get('announcement/last', ['uses' => 'AnnouncementController@last', 'as' => 'announcements.last']);
+
 /*
 * SERVICE
 */
 Route::resource('service','ServiceController');
+
 
 /*
 *
 * ACCOMMODATION
 */
 Route::resource('accommodation','AccommodationController');
+//set services
+Route::post('accommodation/{id}/{services}', ['uses' => 'AccommodationController@setServices', 'as' => 'accommodations.setServices']);
 
 /*
 *
