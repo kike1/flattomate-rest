@@ -52,8 +52,9 @@ class AnnouncementController extends Controller
                 ];
             }
 
-            $ad = Announcement::create($request->all());
-            return Response::make(json_encode($ad), 200)->header('Content-Type', 'application/json');
+            Announcement::create($request->all());
+            return ['created' => true];
+	    //return Response::make(json_encode($ad), 200)->header('Content-Type', 'application/json');
 
             //return ['created' => true];
         } catch (Exception $e) {

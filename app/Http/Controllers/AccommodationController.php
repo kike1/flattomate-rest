@@ -68,11 +68,9 @@ class AccommodationController extends Controller
                     'errors'  => $validator->errors()->all()
                 ];
             }
-
-            $accommodation = Accommodation::create($request->all());
+	    
+	    $accommodation = Accommodation::create($request->all());
             return Response::make(json_encode($accommodation), 200)->header('Content-Type', 'application/json');
-
-            //return ['created' => true];
         } catch (Exception $e) {
             \Log::info('Error creating announcement: '.$e);
             return \Response::json(['created' => false], 500);
