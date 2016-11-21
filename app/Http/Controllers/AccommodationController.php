@@ -15,11 +15,12 @@ class AccommodationController extends Controller
         $accommodation = Accommodation::findOrFail($idaccommodation);
 
         foreach ($services as $service) {
-            $accommodation->services()->save($service);
+            if(!$accommodation->services->contains($service)){
+                $accommodation->services()->save($service);
+                return \Response::json(['services_added' => true], 200);
+            }else
+                return response()->json(['errors'=>array(['code'=>404,'message'=>'Ya tenía ese servicio!'])],404);
         }
-
-        return \Response::json(['services_added' => true], 200);
-
     }
 
     /**
