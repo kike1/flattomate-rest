@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Response;
 use App\Announcement;
+use App\Image;
+
+use Intervention\Image\ImageManagerStatic as ImageIntervention;
 
 class AnnouncementController extends Controller
 {
@@ -52,9 +55,9 @@ class AnnouncementController extends Controller
                 ];
             }
 
-            Announcement::create($request->all());
-            return ['created' => true];
-	    //return Response::make(json_encode($ad), 200)->header('Content-Type', 'application/json');
+            $ad = Announcement::create($request->all());
+            //return ['created' => true];
+	    return Response::make(json_encode($ad), 200)->header('Content-Type', 'application/json');
 
             //return ['created' => true];
         } catch (Exception $e) {
@@ -105,13 +108,17 @@ class AnnouncementController extends Controller
         return Announcement::findOrFail($id)->accommodation;
     }
 
-    public function uploadAnnouncementImage(Request $request){
+    public function uploadAnnouncementImage(Request $request, $idAnn){
         
         if ($request->file)
         {
             $image_name = $request->file->getClientOriginalName();
-            Image::make($request->file)->fit(300)->save('announcements/'.$image_name);
+            ImageIntervention::make($request->file)->fit(300)->save('announcements/'.$image_name);
             
+	    $image = new Image;
+            $image->name = $request->name;
+	    $image->id_announcement = $idAnn;
+            $image->save();
             return \Response::json(['uploaded' => true], 200);    
         }
 
