@@ -108,7 +108,7 @@ class AnnouncementController extends Controller
         return Announcement::findOrFail($id)->accommodation;
     }
 
-    public function uploadAnnouncementImage(Request $request, $idAnn){
+    public function uploadAnnouncementImage(Request $request, $id){
         
         if ($request->file)
         {
@@ -117,7 +117,7 @@ class AnnouncementController extends Controller
             
 	    $image = new Image;
             $image->name = $request->name;
-	    $image->id_announcement = $idAnn;
+	    $image->id_announcement = $id;
             $image->save();
             return \Response::json(['uploaded' => true], 200);    
         }

@@ -60,7 +60,7 @@ Route::get('announcement/{id}/services', ['uses' => 'AnnouncementController@getS
 Route::get('announcement/{id}/images', ['uses' => 'AnnouncementController@getImages', 'as' => 'announcements.getImages']);
 Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController@getAccommodation', 'as' => 'announcements.getAccommodation']);
 
-Route::post('announcement/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
+Route::post('announcement/{id}/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
 Route::get('announcement/last', ['uses' => 'AnnouncementController@last', 'as' => 'announcements.last']);
 
 /*
