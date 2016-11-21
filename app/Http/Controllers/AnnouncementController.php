@@ -116,7 +116,7 @@ class AnnouncementController extends Controller
             ImageIntervention::make($request->file)->fit(300)->save('announcements/'.$image_name);
             
 	    $image = new Image;
-            $image->name = $request->name;
+            $image->name = $image_name;
 	    $image->id_announcement = $id;
             $image->save();
             return \Response::json(['uploaded' => true], 200);    
