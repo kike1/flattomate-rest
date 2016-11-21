@@ -11,16 +11,14 @@ use Response;
 class AccommodationController extends Controller
 {
 
-    public function setServices($idaccommodation, $services){
+    public function setServices($idaccommodation, $service){
         $accommodation = Accommodation::findOrFail($idaccommodation);
 
-        foreach ($services as $service) {
             if(!$accommodation->services->contains($service)){
                 $accommodation->services()->save($service);
-                return \Response::json(['services_added' => true], 200);
+                return \Response::json(['service_added' => true], 200);
             }else
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'Ya tenía ese servicio!'])],404);
-        }
     }
 
     /**

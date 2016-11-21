@@ -75,7 +75,7 @@ Route::resource('service','ServiceController');
 */
 Route::resource('accommodation','AccommodationController');
 //set services
-Route::post('accommodation/{id}/services/{services}', ['uses' => 'AccommodationController@setServices', 'as' => 'accommodations.setServices']);
+Route::post('accommodation/{id}/service/{service}', ['uses' => 'AccommodationController@setServices', 'as' => 'accommodations.setServices']);
 
 /*
 *
