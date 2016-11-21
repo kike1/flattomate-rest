@@ -13,9 +13,9 @@ class AccommodationController extends Controller
 
     public function setServices($idaccommodation, $service){
         $accommodation = Accommodation::findOrFail($idaccommodation);
-
-            if(!$accommodation->services->contains($service)){
-                $accommodation->services()->save($service);
+        $serviceobj = Service::findOrFail($service);
+            if(!$accommodation->services->contains($serviceobj)){
+                $accommodation->services()->save($serviceobj);
                 return \Response::json(['service_added' => true], 200);
             }else
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'Ya tenía ese servicio!'])],404);
