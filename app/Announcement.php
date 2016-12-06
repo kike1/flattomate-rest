@@ -9,7 +9,7 @@ class Announcement extends Model
     protected $table='announcements';
  
     // Atributos que se pueden asignar de manera masiva.
-    protected $fillable = array('title','description','availability','min_stay', 'max_stay', 'price', 'is_visible', 'is_shared_room', 'id_accommodation', 'id_user');
+    protected $fillable = array('title','description','availability', 'rent_kind','min_stay', 'max_stay', 'price', 'is_visible', 'is_shared_room', 'id_accommodation', 'id_user');
  
     // Aquí ponemos los campos que no queremos que se devuelvan en las consultas.
     protected $hidden = ['created_at','updated_at'];
