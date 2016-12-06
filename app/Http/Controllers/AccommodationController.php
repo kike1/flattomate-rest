@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Accommodation;
+use App\Service;
 use Response;
 
 class AccommodationController extends Controller
 {
 
-    public function setServices($idaccommodation, $service){
+    public function setService($idaccommodation, $service){
         $accommodation = Accommodation::findOrFail($idaccommodation);
         $serviceobj = Service::findOrFail($service);
             if(!$accommodation->services->contains($serviceobj)){
