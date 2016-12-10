@@ -8,6 +8,7 @@ use App\Http\Requests;
 use Response;
 use App\Announcement;
 use App\Image;
+use App\Review;
 
 use Intervention\Image\ImageManagerStatic as ImageIntervention;
 
@@ -162,7 +163,18 @@ class AnnouncementController extends Controller
         //
     }
 
+    /**
+    * Retrieves reviews from a given announcement
+    * @param  int  $idannouncement
+    * @return Response
+    */
     public function reviews($idannouncement){
-       $reviews = App\Review::where('id_announcement', $idannouncement)->get();
+        $reviews = Review::where('id_announcement', $idannouncement)->get();
+
+        if($reviews)
+            return Response::make(json_encode($reviews), 200)->header('Content-Type', 'application/json');
+        else
+            return \Response::json(['error' => "This announcement has not reviews"], 404);
+
     }
 }
