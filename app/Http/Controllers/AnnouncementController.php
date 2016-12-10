@@ -161,4 +161,8 @@ class AnnouncementController extends Controller
     {
         //
     }
+
+    public function reviews($idannouncement){
+       $reviews = App\Review::where('id_announcement', $idannouncement)->get();
+    }
 }

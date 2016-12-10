@@ -62,6 +62,7 @@ Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController
 
 Route::post('announcement/{id}/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
 Route::get('announcement/last', ['uses' => 'AnnouncementController@last', 'as' => 'announcements.last']);
+Route::get('announcement/{id}/reviews', ['uses' => 'AnnouncementController@reviews', 'as' => 'announcements.reviews']);
 
 /*
 * SERVICE
