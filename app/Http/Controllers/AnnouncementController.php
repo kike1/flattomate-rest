@@ -104,6 +104,11 @@ class AnnouncementController extends Controller
         return Announcement::findOrFail($id)->images;
     }
 
+    public function getMainImage($id)
+    {
+        return Announcement::findOrFail($id)->images->take(1);
+    }
+
     public function getAccommodation($id)
     {
         return Announcement::findOrFail($id)->accommodation;

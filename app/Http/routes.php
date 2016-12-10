@@ -58,6 +58,7 @@ Route::resource('announcement','AnnouncementController');
 Route::get('announcement/{id}/user', ['uses' => 'AnnouncementController@getUser', 'as' => 'announcements.getUser']);
 Route::get('announcement/{id}/services', ['uses' => 'AnnouncementController@getServices', 'as' => 'announcements.getServices']);
 Route::get('announcement/{id}/images', ['uses' => 'AnnouncementController@getImages', 'as' => 'announcements.getImages']);
+Route::get('announcement/{id}/mainimage', ['uses' => 'AnnouncementController@getMainImage', 'as' => 'announcements.getMainImage']);
 Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController@getAccommodation', 'as' => 'announcements.getAccommodation']);
 
 Route::post('announcement/{id}/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
