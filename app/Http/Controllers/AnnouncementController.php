@@ -106,7 +106,9 @@ class AnnouncementController extends Controller
 
     public function getMainImage($id)
     {
-        return Announcement::findOrFail($id)->images->take(1);
+        $ad = Announcement::findOrFail($id)->images->take(1);
+
+        return $ad[0];
     }
 
     public function getAccommodation($id)
