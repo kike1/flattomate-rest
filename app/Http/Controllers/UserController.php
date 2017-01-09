@@ -105,7 +105,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        $user = User::findOrFail($id);
+        $user->languages = $user->languages;
+        return $user;
     }
     
     public function login($email, $password)
@@ -203,7 +205,7 @@ class UserController extends Controller
     //     return $el['name'];
     // }
     public function getLanguages($id){
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         
         if (!$user)
         {
