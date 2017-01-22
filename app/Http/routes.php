@@ -47,7 +47,9 @@ Route::post('user/upload', ['uses' => 'UserController@uploadImageProfile', 'as' 
 
 //request negotiation
 Route::post('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => 'UserController@requestNegotiation', 
-																	'as' => 'users.removrequestNegotiationeLanguage']);
+																	'as' => 'users.requestNegotiation']);
+Route::get('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => 'UserController@isRequestedNegotiation', 
+																	'as' => 'users.isRequestedNegotiation']);
 
 /*
 *

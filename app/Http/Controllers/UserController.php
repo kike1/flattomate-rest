@@ -261,4 +261,14 @@ class UserController extends Controller
         return \Response::json(['request_negotiation' => true], 200); 
     }
 
+    public function isRequestedNegotiation($id, $idUserAnnouncement){
+        $user = User::findOrFail($id);
+        $userAnnouncement = User::findOrFail($idUserAnnouncement);
+
+        if($user->chats->contains($idUserAnnouncement))
+            return \Response::json(['requested' => true], 200); 
+        else
+            return \Response::json(['requested' => false], 404);  
+    }
+
 }
