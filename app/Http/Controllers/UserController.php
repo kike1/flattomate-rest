@@ -106,7 +106,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        //$user->languages = $user->languages;
+        $user->languages = $user->languages;
         return $user;
     }
     
