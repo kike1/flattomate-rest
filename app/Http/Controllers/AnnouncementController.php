@@ -75,7 +75,10 @@ class AnnouncementController extends Controller
      */
     public function show($id)
     {
-        return Announcement::findOrFail($id);
+        $ad = Announcement::findOrFail($id);
+        $ad->accommodation = $ad->accommodation;
+
+        return $ad;
     }
     
     public function getUser($id)

@@ -29,7 +29,7 @@ class AccommodationController extends Controller
      */
     public function index()
     {
-        //
+        return Accommodation::all();
     }
  
     /**

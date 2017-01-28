@@ -10,6 +10,7 @@ use App\Announcement;
 use App\Language;
 use Response;
 use DB;
+use DebugBar;
 
 //require 'vendor/autoload.php';
 use Intervention\Image\ImageManagerStatic as Image;
@@ -264,11 +265,20 @@ class UserController extends Controller
     public function isRequestedNegotiation($id, $idUserAnnouncement, $idAnnouncement){
         $user = User::findOrFail($id);
         $userAnnouncement = User::findOrFail($idUserAnnouncement);
+        $response = \Response::json(['requested' => false], 404);  
+        $chatsCollection = $user->chats;
 
-        if($user->chats->contains($idUserAnnouncement))
-            return \Response::json(['requested' => true], 200); 
-        else
-            return \Response::json(['requested' => false], 404);  
+        \Debugbar::warning($chatsCollection);
+        if($chatsCollection->contains($userAnnouncement)){
+            //$response = \Response::json(['requested' => true], 200); 
+            foreach($chatsCollection as $chat){
+                \Debugbar::error($chat->pivot);
+                if($chat->pivot->idAnnouncement == $idAnnouncement)
+                    $response = \Response::json(['requested' => true], 200);
+            }   
+        }
+        
+        return $response;
     }
 
 }
