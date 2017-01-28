@@ -9,7 +9,10 @@
         "laravel/framework": "5.2.*",
         "intervention/image": "dev-master",
         "doctrine/dbal": "2.5.1",
-        "barryvdh/laravel-debugbar": "^2.3"
+        "barryvdh/laravel-debugbar": "^2.3",
+        "barryvdh/laravel-ide-helper": "^2.2",
+        "maslosoft/cachetest": "dev-master",
+        "behat/behat": "3.2.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.6",

@@ -10,6 +10,7 @@ use App\Announcement;
 use App\Language;
 use Response;
 use DB;
+use Illuminate\Support\Facades\Log;
 use DebugBar;
 
 //require 'vendor/autoload.php';
@@ -270,10 +271,9 @@ class UserController extends Controller
 
         \Debugbar::warning($chatsCollection);
         if($chatsCollection->contains($userAnnouncement)){
-            //$response = \Response::json(['requested' => true], 200); 
             foreach($chatsCollection as $chat){
-                \Debugbar::error($chat->pivot);
-                if($chat->pivot->idAnnouncement == $idAnnouncement)
+                Log::info("Announcement:" + $chat->pivot->id_announcement);
+                if($chat->pivot->id_announcement == $idAnnouncement)
                     $response = \Response::json(['requested' => true], 200);
             }   
         }
