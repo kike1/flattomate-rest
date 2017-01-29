@@ -9,6 +9,7 @@ use Response;
 use App\Announcement;
 use App\Image;
 use App\Review;
+use Illuminate\Support\Facades\Log;
 
 use Intervention\Image\ImageManagerStatic as ImageIntervention;
 
@@ -21,7 +22,12 @@ class AnnouncementController extends Controller
      */
     public function index()
     {
-        return Announcement::all();
+        $announcements = Announcement::all();
+        foreach($announcements as $ad){
+            Log::info("Announcement:" + $ad->id);
+            $ad->accommodation = $ad->accommodation;
+        }  
+        return $announcements;
     }
  
     /**
