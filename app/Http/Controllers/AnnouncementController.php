@@ -29,6 +29,10 @@ class AnnouncementController extends Controller
         }  
         return $announcements;
     }
+
+    public function search($title){
+        return Announcement::where('title', 'LIKE', '%'.$title.'%')->get();
+    }
  
     /**
      * Store a newly created resource in storage.

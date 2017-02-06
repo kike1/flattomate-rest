@@ -67,6 +67,8 @@ Route::post('announcement/{id}/upload', ['uses' => 'AnnouncementController@uploa
 Route::get('announcement/last', ['uses' => 'AnnouncementController@last', 'as' => 'announcements.last']);
 Route::get('announcement/{id}/reviews', ['uses' => 'AnnouncementController@reviews', 'as' => 'announcements.reviews']);
 
+Route::get('announcement/search/{title}', ['uses' => 'AnnouncementController@search', 'as' => 'announcements.search']);
+
 /*
 * SERVICE
 */
