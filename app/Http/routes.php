@@ -51,6 +51,12 @@ Route::post('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => '
 Route::get('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => 'UserController@isRequestedNegotiation', 
 																	'as' => 'users.isRequestedNegotiation']);
 
+//send chat message
+Route::post('user/{id_sender}/chat/{id_receiver}/message/{message}', ['uses' => 'UserController@chat', 'as' => 'users.chat']);
+Route::get('user/{id}/chats', ['uses' => 'UserController@chatsFromUser', 'as' => 'users.chatsFromUser']);
+
+
+
 /*
 *
 * ANNOUNCEMENT
@@ -66,6 +72,7 @@ Route::get('announcement/{id}/accommodation', ['uses' => 'AnnouncementController
 Route::post('announcement/{id}/upload', ['uses' => 'AnnouncementController@uploadAnnouncementImage', 'as' => 'announcements.uploadAnnouncementImage']);
 Route::get('announcement/last', ['uses' => 'AnnouncementController@last', 'as' => 'announcements.last']);
 Route::get('announcement/{id}/reviews', ['uses' => 'AnnouncementController@reviews', 'as' => 'announcements.reviews']);
+Route::post('announcement/review', ['uses' => 'AnnouncementController@makeReview', 'as' => 'announcements.makeReview']);
 
 Route::get('announcement/search/{title}', ['uses' => 'AnnouncementController@search', 'as' => 'announcements.search']);
 

@@ -197,4 +197,25 @@ class AnnouncementController extends Controller
             return \Response::json(['error' => "This announcement has not reviews"], 404);
 
     }
+
+    /**
+     * Make a review from a given announcement to user
+     * @param Request $review
+     * @return Response
+     */
+    public function makeReview(Request $review){
+
+        $newReview = new Review;
+        $newReview->id_user_wrote = $review->id_user_wrote;
+        $newReview->id_user_receive = $review->id_user_receive;
+        $newReview->id_announcement = $review->id_announcement;
+        $newReview->description = $review->description;
+        $newReview->rating = $review->rating;
+
+        if($newReview->save())
+            return \Response::json(['review' => true], 200);
+        else
+            return \Response::json(['review' => false], 404);
+
+    }
 }

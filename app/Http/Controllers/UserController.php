@@ -281,4 +281,9 @@ class UserController extends Controller
         return $response;
     }
 
+    public function chatsFromUser($id){
+        $user = User::findOrFail($id);
+        return $user->chats;
+    }
+
 }
