@@ -50,6 +50,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function chatsUser()
     {
-        return $this->hasMany('App\Chat', 'id');
+        return $this->hasMany('App\Chat', 'id_user_receive');
     }
 }

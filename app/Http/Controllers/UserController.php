@@ -282,8 +282,8 @@ class UserController extends Controller
     }
 
     public function chatsFromUser($id){
-        $user = User::findOrFail($id);
-        return $user->chatsUser;
+        //$user = User::findOrFail($id);
+        return DB::table('chats')->select('*')->where('id_user_receive', '=', $id)->get();
     }
 
     public function getReviews($id){
