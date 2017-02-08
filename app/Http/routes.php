@@ -52,8 +52,11 @@ Route::post('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => '
 Route::get('user/{id}/chat/{idUserAnnouncement}/{idAnnouncement}', ['uses' => 'UserController@isRequestedNegotiation', 
 																	'as' => 'users.isRequestedNegotiation']);
 
-//send chat message
+//send review message
 Route::post('user/{id_sender}/chat/{id_receiver}/message/{message}', ['uses' => 'UserController@chat', 'as' => 'users.chat']);
+
+Route::post('user/chat', ['uses' => 'UserController@sendChatMessage', 'as' => 'users.sendChatMessage']);
+
 Route::get('user/{id}/chats', ['uses' => 'UserController@chatsFromUser', 'as' => 'users.chatsFromUser']);
 
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User;
-use App\Announcement;
+use App\Chat;
 use App\Language;
 use Response;
 use DB;
@@ -283,12 +283,26 @@ class UserController extends Controller
 
     public function chatsFromUser($id){
         $user = User::findOrFail($id);
-        return $user->chats;
+        return $user->chatsUser;
     }
 
     public function getReviews($id){
         $user = User::findOrFail($id);
         return $user->reviews;
+    }
+
+    public function sendChatMessage(Request $chat){
+
+        $newChat = new Chat;
+        $newChat->id_user_wrote = $chat->id_user_wrote;
+        $newChat->id_user_receive = $chat->id_user_receive;
+        $newChat->id_announcement = $chat->id_announcement;
+        $newChat->message = $chat->message;
+
+        if($newChat->save())
+            return \Response::json(['chat' => true], 200);
+        else
+            return \Response::json(['chat' => false], 404);
     }
 
 }

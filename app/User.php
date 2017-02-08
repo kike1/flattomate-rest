@@ -47,4 +47,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->belongsToMany('App\User', 'users_answer_users', 'id_user_sender', 'id_user_receiver')->withPivot('id_announcement');
     }
+
+    public function chatsUser()
+    {
+        return $this->hasMany('App\Chat', 'id');
+    }
 }
