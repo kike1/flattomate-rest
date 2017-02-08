@@ -35,7 +35,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function reviews()
     {
-        return $this->hasMany('App\Review');
+        return $this->hasMany('App\Review', 'id_user_receive');
     }
 
     public function announcements()

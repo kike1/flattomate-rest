@@ -22,6 +22,7 @@ Route::get('/', function () {
 Route::resource('user','UserController');
 
 Route::post('user/{email}/{password}', ['uses' => 'UserController@login', 'as' => 'users.login']);
+Route::get('user/{id}/reviews', ['uses' => 'UserController@getReviews', 'as' => 'users.getReviews']);
 
 //avatar img
 Route::get('imgs/{filename}', function ($filename)

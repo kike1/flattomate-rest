@@ -286,4 +286,9 @@ class UserController extends Controller
         return $user->chats;
     }
 
+    public function getReviews($id){
+        $user = User::findOrFail($id);
+        return $user->reviews;
+    }
+
 }
