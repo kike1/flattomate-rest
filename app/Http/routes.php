@@ -58,6 +58,7 @@ Route::post('user/{id_sender}/chat/{id_receiver}/message/{message}', ['uses' => 
 Route::post('user/chat', ['uses' => 'UserController@sendChatMessage', 'as' => 'users.sendChatMessage']);
 
 Route::get('user/{id}/chats', ['uses' => 'UserController@chatsFromUser', 'as' => 'users.chatsFromUser']);
+Route::get('user/{id}/chats/recent', ['uses' => 'UserController@lastChatsFromUser', 'as' => 'users.lastChatsFromUser']);
 
 
 
