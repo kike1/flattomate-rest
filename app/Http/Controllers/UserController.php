@@ -294,8 +294,9 @@ class UserController extends Controller
 
     public function lastChatsFromUser($id){
         $user = User::findOrFail($id);
-        if($user)
-            $chats = DB::table('chats')->where('id_user_receive', '=', $id)->groupBy('id_announcement')->orderBy('created_at', 'desc')->get();
+        if($user){
+            $chats = DB::table('chats')->where('id_user_receive', '=', $id)->orderBy('created_at', 'desc')->limit(1)->get();
+        }
 
         if($chats)
             return $chats;
