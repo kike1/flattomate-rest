@@ -59,7 +59,7 @@ Route::post('user/chat', ['uses' => 'UserController@sendChatMessage', 'as' => 'u
 
 Route::get('user/{id}/chats', ['uses' => 'UserController@chatsFromUser', 'as' => 'users.chatsFromUser']);
 Route::get('user/{id}/chats/recent', ['uses' => 'UserController@lastChatsFromUser', 'as' => 'users.lastChatsFromUser']);
-Route::get('user/{id_user}/chats/{id_ad}', ['uses' => 'UserController@chatsFromAnnouncement', 'as' => 'users.chatsFromAnnouncement']);
+Route::get('user/{idr}/chats/{idw}/announcement/{idad}', ['uses' => 'UserController@chatsFromAnnouncement', 'as' => 'users.chatsFromAnnouncement']);
 
 
 /*
