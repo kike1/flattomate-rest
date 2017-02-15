@@ -250,17 +250,23 @@ class UserController extends Controller
         return \Response::json(['uploaded' => false], 204);
     }
 
-    public function requestNegotiation($id, $idUserAnnouncement, $idAnnouncement){
+    public function requestNegotiation($id, $idUserAnnouncement, $idAnnouncement)
+    {
         $user = User::findOrFail($id);
         $userAnnouncement = User::findOrFail($idUserAnnouncement);
         //$announcement = Announcement::findOrFail($idAnnouncement);
 
-        if($user->chats->contains($idUserAnnouncement))
-            return \Response::json(['request_negotiation' => false], 404); 
-        else
-            $user->chats()->save($userAnnouncement, ['id_announcement' => $idAnnouncement]);   
-        
-        return \Response::json(['request_negotiation' => true], 200); 
+        $requests = DB::table('users_answer_users')->select('*')->where
+        ('id_announcement', '=', $idAnnouncement)->where
+        ('id_user_sender', '=', $id)->where
+        ('id_user_receiver', '=', $idUserAnnouncement)->get();
+        if ($requests) {
+            return \Response::json(['request_negotiation' => false], 404);
+        }else {
+            $user->chats()->save($userAnnouncement, ['id_announcement' => $idAnnouncement]);
+
+            return \Response::json(['request_negotiation' => true], 200);
+        }
     }
 
     public function isRequestedNegotiation($id, $idUserAnnouncement, $idAnnouncement){
