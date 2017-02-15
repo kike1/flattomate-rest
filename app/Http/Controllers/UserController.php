@@ -304,6 +304,18 @@ class UserController extends Controller
             return \Response::json(['error' => 'No chats found'], 404);
     }
 
+    public function chatsFromAnnouncement($id_user, $id_ad){
+        $user = User::findOrFail($id_user);
+        if($user){
+            $chats = DB::table('chats')->select('*')->where('id_announcement', '=', $id_ad)->where('id_user_receive', '=', $id_user)->orderBy('created_at', 'asc')->get();
+        }
+
+        if($chats)
+            return $chats;
+        else
+            return \Response::json(['error' => 'No chats found'], 404);
+    }
+
     public function getReviews($id){
         $user = User::findOrFail($id);
         return $user->reviews;
