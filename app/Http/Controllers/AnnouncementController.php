@@ -8,8 +8,10 @@ use App\Http\Requests;
 use Response;
 use App\Announcement;
 use App\Image;
+use App\Favorite;
 use App\Review;
 use Illuminate\Support\Facades\Log;
+use DB;
 
 use Intervention\Image\ImageManagerStatic as ImageIntervention;
 
@@ -217,5 +219,28 @@ class AnnouncementController extends Controller
         else
             return \Response::json(['review' => false], 404);
 
+    }
+
+    public function favorite(Request $request){
+
+        $fav = new Favorite;
+        if($request->id_announcement != 0 && $request->id_announcement != 0){
+            $fav->id_user = $request->id_user;
+            $fav->id_announcement = $request->id_announcement;
+
+        }
+        if($fav->save())
+            return \Response::json(['favorite' => true], 200);
+        else
+            return \Response::json(['favorite' => false], 404);
+    }
+
+    public function isFavorite($ida, $idu){
+
+        $isFavorite = DB::table('favorites')->select('*')->where('id_user', '=', $idu)->where('id_announcement', '=', $ida)->get();
+        if($isFavorite)
+            return \Response::json(['isFavorite' => true], 200);
+        else
+            return \Response::json(['isFavorite' => false], 404);
     }
 }

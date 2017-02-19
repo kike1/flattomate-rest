@@ -100,3 +100,6 @@ Route::post('accommodation/{id}/service/{service}', ['uses' => 'AccommodationCon
 * REVIEWS
 */
 Route::resource('review','ReviewController');
+
+Route::post('announcement/favorite', ['uses' => 'AnnouncementController@favorite', 'as' => 'announcements.favorite']);
+Route::get('announcement/{ida}/{idu}/favorite', ['uses' => 'AnnouncementController@isFavorite', 'as' => 'announcements.isFavorite']);
