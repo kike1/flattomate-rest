@@ -313,10 +313,12 @@ class UserController extends Controller
     public function chatsFromAnnouncement($idr, $idw, $idad){
         $user = User::findOrFail($idr);
         if($user){
+            $ids = array($idr, $idw);
             $chats = DB::table('chats')->select('*')->where
-                    ('id_announcement', '=', $idad)->where
-                    ('id_user_receive', '=', $idr)->where
-                    ('id_user_wrote' , '=', $idw)->orderBy('created_at', 'asc')->get();
+            ('id_user_receive', '=', $idr)->where('id_user_wrote', '=', $idw)
+                ->orWhere(function ($query) use ($ids) {
+                    $query->where('id_user_receive', '=', $ids[1])->where('id_user_wrote', '=', $ids[0]);
+            })->where('id_announcement', '=', $idad)->get();
         }
 
         if($chats)
