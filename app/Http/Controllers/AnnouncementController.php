@@ -243,4 +243,13 @@ class AnnouncementController extends Controller
         else
             return \Response::json(['isFavorite' => false], 404);
     }
+
+    public function favorites($id){
+
+        $favorites = DB::table('favorites')->select('*')->where('id_user', '=', $id)->get();
+        if($favorites)
+            return Response::make(json_encode($favorites), 200)->header('Content-Type', 'application/json');
+        else
+            return \Response::json(['error' => false], 404);
+    }
 }
