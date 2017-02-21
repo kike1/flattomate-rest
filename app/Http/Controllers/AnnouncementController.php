@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Accommodation;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -172,8 +173,9 @@ class AnnouncementController extends Controller
     public function update(Request $request, $id)
     {
         $announcement = Announcement::findOrFail($id);
-        $accommodation = $announcement->accommodation();
-        $announcement->accommodation =  $accommodation;
+        //$accommodation = new Accommodation;
+        //$accommodation = $announcement->accommodation();
+        //$announcement->accommodation =  $accommodation;
         if($announcement->update($request->all()))
             return \Response::json(['updated' => true], 200);
         else
