@@ -169,9 +169,15 @@ class AnnouncementController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
-        //
+        $announcement = Announcement::findOrFail($id);
+        $accommodation = $announcement->accommodation();
+        $announcement->accommodation =  $accommodation;
+        if($announcement->update($request->all()))
+            return \Response::json(['updated' => true], 200);
+        else
+            return \Response::json(['updated' => false], 204);
     }
  
     /**
